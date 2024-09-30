@@ -3,14 +3,14 @@ pipeline {
 
     environment {
         DOCKERHUB_CREDENTIALS_ID = 'dockerhub-credentials'
-        DOCKERHUB_REPO = 'jafestro/devopschain'
+        DOCKERHUB_REPO = 'jafestro/secdevops'
         DOCKER_IMAGE_TAG = 'ver1'
     }
 
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/ADirin/devopschain_f2024.git'
+                git 'https://github.com/Jafestro/SecDevOps.git'
             }
         }
         stage('Run Tests') {
