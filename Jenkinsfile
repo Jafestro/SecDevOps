@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKERHUB_CREDENTIALS_ID = 'dockerhub-credentials'
+        DOCKERHUB_CREDENTIALS_ID = 'f2173128-83c0-4591-be81-5972b42f1982'
         DOCKERHUB_REPO = 'jafestro/secdevops'
         DOCKER_IMAGE_TAG = 'ver1'
     }
@@ -15,15 +15,24 @@ pipeline {
         }
         stage('Run Tests') {
             steps {
-                // Run the tests first to generate data for Jacoco and JUnit
-                bat 'mvn clean test' // For Windows agents
-                // sh 'mvn clean test' // Uncomment if on a Linux agent
+                script {
+                    if (isUnix()) {
+                        sh 'mvn clean test' // For Linux agents
+                    } else {
+                        bat 'mvn clean test' // For Windows agents
+                    }
+                }
             }
         }
         stage('Code Coverage') {
             steps {
-                // Generate Jacoco report after the tests have run
-                bat 'mvn jacoco:report'
+                script {
+                    if (isUnix()) {
+                        sh 'mvn jacoco:report'
+                    } else {
+                        bat 'mvn jacoco:report'
+                    }
+                }
             }
         }
         stage('Publish Test Results') {
@@ -56,4 +65,3 @@ pipeline {
         }
     }
 }
-
